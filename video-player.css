@@ -1,0 +1,185 @@
+:root {
+  --color-white: #ccc;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 750px;
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+  padding-top: 30px;
+}
+
+.video-container.full-screen {
+  max-width: initial;
+  width: 100%;
+}
+video {
+  width: 100%;
+}
+/* video::-webkit-media-controls-enclosure {
+  display: none !important;
+} */
+.video-controls-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+}
+
+.video-container:hover .video-controls-container,
+.video-container:focus-within .video-controls-container,
+.video-container.paused .video-controls-container {
+  opacity: 1;
+}
+
+.video-controls-container .controls {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.25rem;
+  align-items: center;
+}
+.video-controls-container .controls button {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  padding: 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 150ms ease-in-out;
+}
+.video-controls-container .controls button:hover {
+  opacity: 1;
+}
+
+.video-container.paused .pause-icon {
+  display: none;
+}
+.video-container:not(.paused) .play-icon {
+  display: none;
+}
+
+.play-1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.volume-high-icon,
+.volume-muted-icon {
+  display: none;
+}
+.volume-container {
+  display: flex;
+  align-items: center;
+}
+
+.video-container[data-volume-level="high"] .volume-high-icon {
+  display: block;
+}
+
+.video-container[data-volume-level="muted"] .volume-muted-icon {
+  display: block;
+}
+
+.volume-slider {
+  display: none;
+}
+
+.volume-container:hover .volume-slider {
+  display: block;
+}
+
+.duration-container {
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-grow: 1;
+}
+
+.video-container.full-screen .fs-enable {
+  display: none;
+}
+
+.video-container:not(.full-screen) .fs-disable {
+  display: none;
+}
+
+.cc-off-btn {
+  display: none;
+}
+.set-btn {
+  position: relative;
+}
+
+.menu-btn {
+  position: absolute;
+  width: 170px;
+  bottom: 35px;
+  right: 25px;
+  display: none;
+}
+
+.settings-btn:hover .menu-btn {
+  display: block;
+}
+
+.video-controls-container {
+  display: none;
+}
+.video-container:hover .video-controls-container,
+.video-container:hover .play-1 {
+  display: block;
+}
+
+.progressbar-container {
+  /* height: 6px; */
+  margin-inline: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.progress {
+  background-color: rgba(100, 100, 100, 0.5);
+  height: 3px;
+  width: 100%;
+  position: relative;
+}
+
+.progress::before {
+  --preview-position: 1;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: calc(100% - var(--preview-position) * 100%);
+  background-color: grey;
+  display: none;
+}
+
+.progress::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: calc(100% - var(--progress-position, 1) * 100%);
+  background-color: red;
+}
