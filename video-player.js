@@ -1,33 +1,63 @@
 const playPauseBtn = document.querySelector(".play-pause-btn");
+const forwardBtn = document.querySelector(".frwd-btn");
+const backwardBtn = document.querySelector(".bkwd-btn");
 const fullScreenBtn = document.querySelector(".full-screen-btn");
 const muteBtn = document.querySelector(".mute-btn");
 const volumeSlider = document.querySelector(".volume-slider");
 const currentTimeElement = document.querySelector(".current-time");
 const totalTimeElement = document.querySelector(".total-time");
+const progreesBar = document.querySelector(".progressbar-container");
 const progress = document.querySelector(".progress");
+const settingsBtn = document.querySelector(".set-btn button");
+const speedBtn = document.querySelector(".speed");
 const videoContainer = document.querySelector(".video-container");
 const video = document.querySelector("video");
 
 // progressbar-section
 
-video.addEventListener("loadedmetadata", () => {
-  progress.setAttribute("max", video.duration);
+video.addEventListener("timeupdate", (e) => {
+  let { currentTime, duration } = e.target;
+  let percent = (currentTime / duration) * 100;
+  progress.style.width = `${percent}%`;
 });
 
-video.addEventListener("timeupdate", () => {
-  progress.value = video.currentTime;
-  progress.style.width = `${Math.floor(
-    (video.currentTime * 100) / video.duration
-  )}%`;
+progreesBar.addEventListener("click", (e) => {
+  let timelineWidth = progreesBar.clientWidth;
+  video.currentTime = (e.offsetX / timelineWidth) * video.duration;
 });
 
-progress.addEventListener("mousedown", function () {
-  video.pause();
+const drag = (e) => {
+  let timelineWidth = progreesBar.clientWidth;
+  progress.style.width = `${e.offsetX}px`;
+  video.currentTime = (e.offsetX / timelineWidth) * video.duration;
+};
+
+progreesBar.addEventListener("mousedown", () => {
+  progreesBar.addEventListener("mousemove", drag);
 });
 
-progress.addEventListener("mouseup", function () {
-  video.play();
+videoContainer.addEventListener("mouseup", () => {
+  progreesBar.removeEventListener("mousemove", drag);
 });
+//  speed-controls
+
+// settingsBtn.addEventListener("click", e =>{
+//   speedBtn.classList.toggle("show");
+// });
+
+// document.addEventListener("click", e =>{
+// if(e.target.tagName !== "button" || e.target.className !== "set-btn"){
+//   speedBtn.classList.remove("show");
+// }
+// });
+
+// speedBtn.querySelectorAll("li").forEach(option =>{
+//   option.addEventListener("click", () =>{
+//     video.playbackRate = option.dataset.speed;
+//     speedBtn.querySelector("active").classList.remove("active")
+//     option.classList.add("active");
+//   })
+// });
 
 // //Duration-section
 
@@ -102,6 +132,16 @@ function setFullscreenData(state) {
 
 document.addEventListener("fullscreenchange", () => {
   setFullscreenData(!document.fullscreenElement);
+});
+
+// frwd-bkwd
+
+backwardBtn.addEventListener("click", () => {
+  video.currentTime -= 5;
+});
+
+forwardBtn.addEventListener("click", () => {
+  video.currentTime += 5;
 });
 
 // play/pause section
